@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
             {
                 if (other.gameObject.CompareTag("SafePart")) 
                 {
-                    Destroy(other.transform.parent.gameObject);
+                    other.transform.parent.gameObject.GetComponent<PlatformController>().BreakAllParts();
                 }
                 else if (other.gameObject.CompareTag("UnsafePart"))
                  {

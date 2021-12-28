@@ -49,7 +49,7 @@ public class LevelSpawner : MonoBehaviour
 
      private void LesserModelSelection() 
     {
-        int[] randomModelList = new int [] {circleModel, flowerModel};
+        int[] randomModelList = new int [] {circleModel};
         int randomIndex = Random.Range(0, randomModelList.Length);
         selectedModel = randomModelList[randomIndex];
     }
