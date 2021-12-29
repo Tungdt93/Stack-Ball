@@ -19,7 +19,8 @@ public class PlatformController : MonoBehaviour
         GetAllParts();
         GetAllRigidBodies();
         GetAllMeshRenders();
-        GetAllColliders();     
+        GetAllColliders();    
+        Player.OnBreakingPlatform += BreakAllParts; 
     }
 
     private void GetAllParts()
@@ -88,7 +89,6 @@ public class PlatformController : MonoBehaviour
         for (int i = 0; i < directions.Length; i++)
         {
             directions[i] = subDirections[i].normalized;
-            Debug.Log(directions[i]);
         }
 
         for (int i = 0; i < rigidbodies.Length; i++)
@@ -105,6 +105,7 @@ public class PlatformController : MonoBehaviour
         }
 
         StartCoroutine(RemovePlatform());
+        GameManager.instance.IncreaseScore();
     }
 
     IEnumerator RemovePlatform()

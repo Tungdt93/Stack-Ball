@@ -11,7 +11,7 @@ public class LevelSpawner : MonoBehaviour
     [SerializeField] private float ySpawnPosition;
     [SerializeField] private float spaceBetweenPlatform;
     [SerializeField] private float rotation;
-    [SerializeField] private float numberOfPlatforms;
+    [SerializeField] private int numberOfPlatforms;
     [SerializeField] private float rotationChange;
     private int circleModel = 0;
     private int flowerModel = 4;
@@ -19,7 +19,6 @@ public class LevelSpawner : MonoBehaviour
     private int spikesModel = 12;
     private int squareModel = 16;
     private int selectedModel;
-  
 
     // Start is called before the first frame update
     void Awake()
@@ -58,21 +57,28 @@ public class LevelSpawner : MonoBehaviour
     {
         LesserModelSelection();
         int randomPrefabIndex = 0;
+        GameObject[] platforms = new GameObject[numberOfPlatforms];
         for (int i = 0; i < numberOfPlatforms; i++)
         {
             if (i == 0) 
                 randomPrefabIndex = 0;
             else
                 randomPrefabIndex = Random.Range(selectedModel, selectedModel + 3 + 1);
-            var newPlatform = Instantiate(models[randomPrefabIndex]);
+            GameObject newPlatform = Instantiate(models[randomPrefabIndex], theStack.transform);
             newPlatform.transform.position = new Vector3(0f, ySpawnPosition, 0f);
             newPlatform.transform.eulerAngles = new Vector3(0f, rotation, 0f);
-            newPlatform.transform.parent = theStack.transform;
+            //newPlatform.transform.parent = theStack.transform;
             rotation += rotationChange;
-            ySpawnPosition -= spaceBetweenPlatform;     
+            ySpawnPosition -= spaceBetweenPlatform;   
+            platforms[i] = newPlatform;  
         }
-        var finishPlatform = Instantiate(finishPrefab);
+        GameObject finishPlatform = Instantiate(finishPrefab, theStack.transform);
         finishPlatform.transform.position = new Vector3(0f, ySpawnPosition, 0f);
-        finishPlatform.transform.parent = theStack.transform;
+        //finishPlatform.transform.parent = theStack.transform;
+        // GameObject pole = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cylinder), theStack.transform);
+        // float subDistance = platforms[0].transform.position.y + finishPlatform.transform.position.y;
+        // pole.transform.position = new Vector3(0f, subDistance / 2, 0f);
+        // pole.transform.localScale = new Vector3(1f, subDistance, 1f);
+        // pole.transform.parent = theStack.transform;
     }
 }

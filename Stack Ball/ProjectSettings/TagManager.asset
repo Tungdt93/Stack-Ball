@@ -9,6 +9,7 @@ TagManager:
   - Done
   - UnsafePart
   - SafePart
+  - FinishPlatform
   layers:
   - Default
   - TransparentFX
