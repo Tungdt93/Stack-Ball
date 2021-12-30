@@ -12,10 +12,14 @@ public class PlatformController : MonoBehaviour
     private Rigidbody[] rigidbodies;
     private MeshRenderer[] meshRenderers;
     private Collider[] colliders;
+    private Collider col;
+
+    public Collider Col { get => col; set => col = value; }
 
     // Start is called before the first frame update
     private void OnEnable() 
     {
+        col = GetComponent<BoxCollider>();
         GetAllParts();
         GetAllRigidBodies();
         GetAllMeshRenders();
@@ -103,9 +107,7 @@ public class PlatformController : MonoBehaviour
         {
             colliders[i].enabled = false;
         }
-
         StartCoroutine(RemovePlatform());
-        GameManager.instance.IncreaseScore();
     }
 
     IEnumerator RemovePlatform()

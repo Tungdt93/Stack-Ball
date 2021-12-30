@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player instance;
     public static event Action OnBreakingPlatform;
     public static event Action OnPlayerDeath;
     public static event Action OnPlayerWin;
 
-    public static Player instance;
-
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float speed;
     [SerializeField] private float maxUpwardSpeed;
-    private bool smash, invincible;
+    [SerializeField] private bool invincible;
+    private bool smash;
     private bool finished, playable;
 
     public bool Smash { get => smash; set => smash = value; }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (instance != null && instance != this) 
             Destroy(this.gameObject);
@@ -32,16 +32,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.IsGameOver) 
-            playable = false;
-        if (playable)
-            {
-                if (Input.GetMouseButton(0))
-                smash = true;
-                if (Input.GetMouseButtonUp(0))
-                smash = false;
-            }    
+        if (!GameManager.instance.IsGameOver && !GameManager.instance.LevelCompleted) 
+        {
+            if (Input.GetMouseButton(0))
+            smash = true;
+            if (Input.GetMouseButtonUp(0))
+            smash = false;
+        }    
     }
+
     private void FixedUpdate()
     {
         if (finished)
@@ -57,41 +56,53 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) 
     {
-        if (other.gameObject.CompareTag("FinishPlatform")) 
+        if (!GameManager.instance.IsGameOver && !GameManager.instance.LevelCompleted) 
         {
-            finished = true;
-            UIManager.instance.ShowLevelCompletePanel(true);
-        }
-
-        if (!smash)
-            rb.velocity = new Vector3(0f,maxUpwardSpeed, 0f);
-        else 
-        {
-            if (invincible) 
+            if (other.gameObject.CompareTag("FinishPlatform")) 
             {
-                if (other.gameObject.CompareTag("SafePart") || other.gameObject.CompareTag("UnsafePart")) 
-                {
-                    Destroy(other.transform.parent.gameObject);
-                } 
+                GameManager.instance.LevelCompleted = true;
+                UIManager.instance.ShowLevelCompletePanel(true);
             }
+
+            if (!smash)
+                rb.velocity = new Vector3(0f,maxUpwardSpeed, 0f);
             else 
             {
-                if (other.gameObject.CompareTag("Safepart"))
+                if (invincible) 
                 {
-                    other.transform.parent.gameObject.GetComponent<PlatformController>().BreakAllParts();    
-                } 
-                else if (other.gameObject.CompareTag("UnsafePart")) 
-                {
-                    
+                    if (other.gameObject.CompareTag("SafePart") || other.gameObject.CompareTag("UnsafePart")) 
+                    {
+                        Destroy(other.transform.parent.gameObject);
+                    } 
                 }
-                  
-            }
-        }       
+                else 
+                {
+                    if (other.gameObject.CompareTag("SafePart"))
+                    {
+                        other.transform.parent.gameObject.GetComponent<PlatformController>().BreakAllParts();    
+                    } 
+                    else if (other.gameObject.CompareTag("UnsafePart")) 
+                    {
+                        GameManager.instance.IsGameOver = true;
+                        this.gameObject.SetActive(false);
+                        UIManager.instance.ShowGameOverPanel(true);
+                    }         
+                }
+            }      
+        }
+        
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        GameManager.instance.IncreaseScore();
+        if (other.TryGetComponent(out PlatformController platform)) {
+            platform.Col.enabled = false;
+        }
     }
 
     private void OnCollisionStay(Collision other) 
     {
         if (!smash)
-            rb.velocity = new Vector3(0f,maxUpwardSpeed, 0f);
+            rb.velocity = new Vector3(0f, maxUpwardSpeed, 0f);
     }
 }

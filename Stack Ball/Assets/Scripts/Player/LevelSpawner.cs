@@ -5,14 +5,15 @@ using Random = UnityEngine.Random;
 
 public class LevelSpawner : MonoBehaviour
 {
+    public static LevelSpawner instance;
     [SerializeField] private GameObject theStack;
     [SerializeField] private GameObject[] models;
     [SerializeField] private GameObject finishPrefab;
     [SerializeField] private float ySpawnPosition;
     [SerializeField] private float spaceBetweenPlatform;
     [SerializeField] private float rotation;
-    [SerializeField] private int numberOfPlatforms;
     [SerializeField] private float rotationChange;
+    private int numberOfPlatforms = 20;
     private int circleModel = 0;
     private int flowerModel = 4;
     private int hexModel = 8;
@@ -20,15 +21,27 @@ public class LevelSpawner : MonoBehaviour
     private int squareModel = 16;
     private int selectedModel;
 
+    public int NumberOfPlatforms { get => numberOfPlatforms; set => numberOfPlatforms = value; }
+
     // Start is called before the first frame update
     void Awake()
     {
-        ResetValue();
+        if (instance != null && instance != this) 
+            Destroy(this.gameObject);
+        else
+        {
+            instance = this;
+        }
+            
         GenerateTheStack();
     }
 
-    private void ResetValue()
+    public void ResetValue()
     {
+        foreach (Transform platform in theStack.transform)
+        {
+            Destroy(platform.gameObject);
+        }
         selectedModel = 0;
         ySpawnPosition = 0;
     }
@@ -39,29 +52,31 @@ public class LevelSpawner : MonoBehaviour
         
     }
 
-    private void ModelSelection() 
+    public void ModelSelection() 
     {
         int[] randomModelList = new int [] {circleModel, flowerModel, hexModel, spikesModel, spikesModel};
         int randomIndex = Random.Range(0, randomModelList.Length);
         selectedModel = randomModelList[randomIndex];
     }
 
-     private void LesserModelSelection() 
+     public void LesserModelSelection() 
     {
-        int[] randomModelList = new int [] {circleModel};
+        int[] randomModelList = new int [] {circleModel, flowerModel, hexModel};
         int randomIndex = Random.Range(0, randomModelList.Length);
         selectedModel = randomModelList[randomIndex];
     }
 
-    private void GenerateTheStack() 
+    public void GenerateTheStack() 
     {
+        numberOfPlatforms = GameManager.instance.NumberOfPlatforms;
+        ResetValue();
         LesserModelSelection();
         int randomPrefabIndex = 0;
         GameObject[] platforms = new GameObject[numberOfPlatforms];
         for (int i = 0; i < numberOfPlatforms; i++)
         {
             if (i == 0) 
-                randomPrefabIndex = 0;
+                randomPrefabIndex = selectedModel;
             else
                 randomPrefabIndex = Random.Range(selectedModel, selectedModel + 3 + 1);
             GameObject newPlatform = Instantiate(models[randomPrefabIndex], theStack.transform);

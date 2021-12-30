@@ -13,12 +13,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject levelCompletePanel;
     [SerializeField] private TextMeshProUGUI currentScoreText;
     [SerializeField] private TextMeshProUGUI bestScoreText;
+    [SerializeField] private TextMeshProUGUI currentLevel;
+    [SerializeField] private TextMeshProUGUI nextLevel;
 
     public TextMeshProUGUI CurrentScoreText { get => currentScoreText; set => currentScoreText = value; }
     public TextMeshProUGUI BestScoreText { get => bestScoreText; set => bestScoreText = value; }
+    public TextMeshProUGUI CurrentLevel { get => currentLevel; set => currentLevel = value; }
+    public TextMeshProUGUI NextLevel { get => nextLevel; set => nextLevel = value; }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (instance != null && instance != this)
         {

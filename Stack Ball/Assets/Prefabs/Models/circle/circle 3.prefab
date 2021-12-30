@@ -349,6 +349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8528561060963352157}
   - component: {fileID: 6425430920623707491}
+  - component: {fileID: -3348102540882765979}
   m_Layer: 0
   m_Name: circle 3
   m_TagString: Untagged
@@ -388,6 +389,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   force: 20
   torque: 140
+--- !u!65 &-3348102540882765979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8528561060963508861}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 0.1, z: 3}
+  m_Center: {x: 0, y: -0.2, z: 0}
 --- !u!1 &8528561060963508863
 GameObject:
   m_ObjectHideFlags: 0
