@@ -89,11 +89,5 @@ public class LevelSpawner : MonoBehaviour
         }
         GameObject finishPlatform = Instantiate(finishPrefab, theStack.transform);
         finishPlatform.transform.position = new Vector3(0f, ySpawnPosition, 0f);
-        //finishPlatform.transform.parent = theStack.transform;
-        // GameObject pole = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cylinder), theStack.transform);
-        // float subDistance = platforms[0].transform.position.y + finishPlatform.transform.position.y;
-        // pole.transform.position = new Vector3(0f, subDistance / 2, 0f);
-        // pole.transform.localScale = new Vector3(1f, subDistance, 1f);
-        // pole.transform.parent = theStack.transform;
     }
 }
