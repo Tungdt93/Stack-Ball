@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     private void GameProgress()
     {
         UIManager.instance.CurrentLevel.text = PlayerPrefs.GetInt("Level").ToString();
-         UIManager.instance.NextLevel.text = (PlayerPrefs.GetInt("Level") + 1).ToString();
+        UIManager.instance.NextLevel.text = (PlayerPrefs.GetInt("Level") + 1).ToString();
 
         if (currentScore > PlayerPrefs.GetInt("BestScore"))
         {
